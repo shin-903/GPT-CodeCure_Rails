@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['DATABASE_HOST'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  pool: 5
+
+development:
+  <<: *default
+  database: shin
+
+test:
+  <<: *default
+  database: my_rails_api_test
+
+production:
+  <<: *default
+  database: my_rails_api_production
