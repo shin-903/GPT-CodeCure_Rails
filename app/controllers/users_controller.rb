@@ -37,7 +37,12 @@ class UsersController < ApplicationController
       token = encode_token({ user_id: user.id })
       render json: {
         message: 'Login successful',
-        token: token
+        token: token,
+        # ユーザー情報を返す
+        user: {
+          name: user.name,
+          email: user.email
+        }
       }, status: :ok
     else
       render json: { error: 'Invalid credentials' }, status: :unauthorized

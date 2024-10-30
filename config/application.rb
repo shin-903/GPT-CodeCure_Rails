@@ -22,6 +22,18 @@ module App
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'
+        
+        resource '*', 
+          headers: :any, # 任意のヘッダーを許可
+          methods: [:get, :post, :put, :patch, :delete, :options, :head], # 許可するHTTPメソッド
+          credentials: true # クッキーや認証情報を含むリクエストを許可
+      end
+    end
+
     config.api_only = true
   end
 end
