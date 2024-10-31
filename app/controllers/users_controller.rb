@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   # SECRET_KEY = Rails.application.secrets.secret_key_base.to_s
   SECRET_KEY = 'gsirskfngsafjkgklsxzerfgbn'
 
+  before_action :authenticate_user, only: [:show]
+
   # POST /signup
   def create
     user = User.new(user_params)
@@ -49,6 +51,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    render json: { user: @current_user }
+
+  end
+
+
+
+
+
   private
 
   # Strong parameters
@@ -69,4 +80,22 @@ class UsersController < ApplicationController
       nil
     end
   end
+
+  # JWTを用いてユーザー認証を行う (before_action)
+  def authenticate_user
+    token = request.headers['Authorization']&.split(' ')&.last
+    decoded_payload = decoded_token(token)
+
+    if decoded_payload.nil?
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+      return
+    end
+
+    @current_user = User.find_by(id: decoded_payload['user_id'])
+
+    if @current_user.nil?
+      render json: { error: 'User not found' }, status: :not_found
+    end
+  end
+
 end
