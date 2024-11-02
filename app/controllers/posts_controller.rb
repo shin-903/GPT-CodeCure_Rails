@@ -1,4 +1,27 @@
 class PostsController < ApplicationController
+  
+  # GET /posts
+  def index
+    posts = Post.all
+    render json: posts, include: :tags
+  end
+
+  # GET /post/:id
+  def show
+    post = Post.find_by(id: params[:id])
+  
+    # ポストが存在しない場合のエラーハンドリング
+    if post.nil?
+      render json: { error: 'Post not found' }, status: :not_found
+      return
+    end
+  
+    render json: { 
+      post: post, tags: post.tags }
+    # post: post.as_json(include: :tags)}  //これ1行でtagsも取得可能
+  end
+  
+
   # POST /create/post
   def create
     post = Post.new(post_params)
