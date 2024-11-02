@@ -41,7 +41,8 @@ class UsersController < ApplicationController
         message: 'Login successful',
         token: token,
         # userに紐づいたpostsも一緒に返す
-        posts: user.posts,
+        # posts: user.posts,
+        posts: user.posts.as_json(include: :tags),
         # ユーザー情報を返す（IDを含む）
         user: {
           id: user.id,        # ユーザーIDを追加
