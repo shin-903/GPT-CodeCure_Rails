@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   put '/update/post/:id', to: 'posts#update'
   delete '/delete/post/:id', to: 'posts#destroy'
   resources :users
+  resources :posts
 
 end
 
