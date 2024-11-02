@@ -40,11 +40,13 @@ class UsersController < ApplicationController
       render json: {
         message: 'Login successful',
         token: token,
-        # ユーザー情報を返す
+        # ユーザー情報を返す（IDを含む）
         user: {
+          id: user.id,        # ユーザーIDを追加
           name: user.name,
           email: user.email
         }
+        
       }, status: :ok
     else
       render json: { error: 'Invalid credentials' }, status: :unauthorized
@@ -52,10 +54,19 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: { user: @current_user }
+    user = User.find(params[:id])
 
+    if user
+      render json: {
+        user: user,
+        posts: user.posts # userに紐づいたpostsも一緒に返す
+      }, status: :ok
+    else
+      render json: { error: "User not found" }, status: :not_found
+    end
+  rescue StandardError => e
+    render json: { error: "An unexpected error occurred: #{e.message}" }, status: :internal_server_error
   end
-
 
 
 
