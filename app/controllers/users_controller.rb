@@ -90,7 +90,8 @@ class UsersController < ApplicationController
       render json: { error: 'Unauthorized' }, status: :unauthorized
       return
     end
-
+    
+    #正しく認証された場合、@current_userにユーザー情報を格納
     @current_user = User.find_by(id: decoded_payload['user_id'])
 
     if @current_user.nil?
