@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post '/create/post', to: 'posts#create'
   put '/update/post/:id', to: 'posts#update'
   delete '/delete/post/:id', to: 'posts#destroy'
+  post '/gpt_response', to: 'posts#gpt_response'
   resources :users
   resources :posts
 

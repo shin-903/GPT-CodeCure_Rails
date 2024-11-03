@@ -19,6 +19,9 @@ gem 'rack-cors'
 # Create virtual user
 gem "faker"
 
+gem 'ruby-openai'
+gem 'dotenv-rails'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
