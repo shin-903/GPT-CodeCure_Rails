@@ -25,7 +25,7 @@ module App
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'
+        origins 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'https://gpt-code-cure-react.vercel.app'
         
         resource '*', 
           headers: :any, # 任意のヘッダーを許可
