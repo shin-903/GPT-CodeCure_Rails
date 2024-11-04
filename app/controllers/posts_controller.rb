@@ -1,6 +1,8 @@
 class PostsController < ApplicationController
   require 'openai'
 
+  before_action :authenticate_user, except: [:index, :show ]
+  
   # GET /posts
   def index
     posts = Post.order(created_at: :desc).limit(60)
@@ -116,14 +118,14 @@ class PostsController < ApplicationController
     client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
     # ChatGPTに送信するメッセージ
     messages = [
-      { role: 'system', content: "あなたは記事生成AIです。受け取ったメッセージについて説明する記事を作成して日本語で返してください" },
+      { role: 'system', content: "あなたは記事生成AIです。受け取ったメッセージについて説明する記事を作成して日本語で返してください。また、記事として見やすくなるように改行も適宜お願いします。" },
       { role: 'user', content: user_message }
     ]
     response = client.chat(
       parameters: {
         model: 'gpt-4o-mini', 
         messages: messages,
-        max_tokens: 100,
+        max_tokens: 5000,
         temperature: 0.7
       }
     )
@@ -149,4 +151,6 @@ class PostsController < ApplicationController
   def post_update_params
     params.require(:post).permit(:title, :content)
   end
+
+  
 end
