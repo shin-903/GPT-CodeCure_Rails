@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV['DATABASE_URL'] %>
+  database: shin
 
 test:
   <<: *default
