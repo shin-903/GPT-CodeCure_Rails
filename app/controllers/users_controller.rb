@@ -1,10 +1,8 @@
 class UsersController < ApplicationController
 
   require 'jwt'
-  # SECRET_KEY = Rails.application.secrets.secret_key_base.to_s
-  SECRET_KEY = 'gsirskfngsafjkgklsxzerfgbn'
 
-  before_action :authenticate_user, only: [:show]
+  before_action :authenticate_user, except: [ :create ]
 
   # POST /signup
   def create
@@ -83,34 +81,34 @@ class UsersController < ApplicationController
 
   # JWTトークンを生成するメソッド
   def encode_token(payload)
-    JWT.encode(payload, SECRET_KEY)
+    JWT.encode(payload, ENV['JWT_SECRET_KEY'])
   end
 
-  # JWTトークンをデコードしてユーザーを特定する（認証に使用）
-  def decoded_token(token)
-    begin
-      JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')[0]
-    rescue JWT::DecodeError
-      nil
-    end
-  end
+  # # JWTトークンをデコードしてユーザーを特定する（認証に使用）
+  # def decoded_token(token)
+  #   begin
+  #     JWT.decode(token, ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')[0]
+  #   rescue JWT::DecodeError
+  #     nil
+  #   end
+  # end
 
-  # JWTを用いてユーザー認証を行う (before_action)
-  def authenticate_user
-    token = request.headers['Authorization']&.split(' ')&.last
-    decoded_payload = decoded_token(token)
+  # # JWTを用いてユーザー認証を行う (before_action)
+  # def authenticate_user
+  #   token = request.headers['Authorization']&.split(' ')&.last
+  #   decoded_payload = decoded_token(token)
 
-    if decoded_payload.nil?
-      render json: { error: 'Unauthorized' }, status: :unauthorized
-      return
-    end
+  #   if decoded_payload.nil?
+  #     render json: { error: 'Unauthorized' }, status: :unauthorized
+  #     return
+  #   end
     
-    #正しく認証された場合、@current_userにユーザー情報を格納
-    @current_user = User.find_by(id: decoded_payload['user_id'])
+  #   #正しく認証された場合、@current_userにユーザー情報を格納
+  #   @current_user = User.find_by(id: decoded_payload['user_id'])
 
-    if @current_user.nil?
-      render json: { error: 'User not found' }, status: :not_found
-    end
-  end
+  #   if @current_user.nil?
+  #     render json: { error: 'User not found' }, status: :not_found
+  #   end
+  # end
 
 end
