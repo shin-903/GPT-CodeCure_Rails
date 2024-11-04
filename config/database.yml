@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: shin
+  database: <%= ENV['DATABASE_URL'] %>
 
 test:
   <<: *default
@@ -17,4 +17,5 @@ test:
 
 production:
   <<: *default
-  database: my_rails_api_production
+  # HerokuではDATABASE_URL環境変数が自動的に設定されるため、以下のようにします。
+  url: <%= ENV['DATABASE_URL'] %>
