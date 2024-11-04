@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   require 'jwt'
 
-  before_action :authenticate_user, except: [ :create ]
+  before_action :authenticate_user, except: [ :create, :login ]
 
   # POST /signup
   def create
@@ -69,6 +69,26 @@ class UsersController < ApplicationController
     render json: { error: "An unexpected error occurred: #{e.message}" }, status: :internal_server_error
   end
 
+
+  # PATCH /user
+  def update
+    user = User.find(params[:id])
+    if user.update(user_params)
+      render json: { message: "User updated successfully", user: user }, status: :ok
+    else
+      render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE /user
+  def destroy
+    user = User.find(params[:id])
+    if user.destroy
+      render json: { message: "User deleted successfully" }, status: :ok
+    else
+      render json: { error: "Failed to delete user" }, status: :unprocessable_entity
+    end
+  end
 
 
 
