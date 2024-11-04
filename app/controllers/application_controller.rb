@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   def decoded_token(token)
     begin
+      # HS256アルゴリズム(サーバー内のsecret keyを使用)でトークンをデコード
       decoded = JWT.decode(token, ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')
       decoded[0] # デコード結果のペイロード部分のみを返す
     rescue JWT::DecodeError

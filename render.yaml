@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: my-rails-backend
+    env: docker
+    plan: free  # 無料プランを利用する場合
+    autoDeploy: true
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # Renderの設定画面でデータベースURLを入力
