@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   require 'openai'
 
-  before_action :authenticate_user, except: [:index, :show ]
+  before_action :authenticate_user, except: [:index, :show, :gpt_response]
   
   # GET /posts
   def index
